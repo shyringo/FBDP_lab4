@@ -18,26 +18,3 @@
 提交⽅式
 1. git仓库地址（包括代码、结果和实验报告）
 2. 报名参加竞赛，按照要求提交预测结果至⽹站，给出得分和排名。
-
- create table log(user_id int,item_id int,cat_id int,seller_id int,brand_id int,time_stamp string,action_type int)
-    row format delimited
-    fields terminated by ',';
-load data local inpath '/workspace/dataset1/user_log_format1.csv' into table log;
-insert overwrite table log 
-select * from log where time_stamp='1111';
-create table trueusers as
-select log.user_id from log where action_type=2;
-create table info(user_id int,age_range int,gender int)
-row format delimited
-    fields terminated by ',';
-load data local inpath '/workspace/dataset1/user_info_format1.csv' into table info;
-create table manusers as
-select info.user_id from info where gender=1;
-create table womanusers as
-select info.user_id from info where gender=0;
-insert overwrite table manusers
-elect user_id from manusers intersect select user_id from trueusers;
-insert overwrite table womanusers
-select user_id from womanusers intersect select user_id from trueusers;
-select count(user_id) from manusers;
-select count(user_id) from womanusers; 
